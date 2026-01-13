@@ -2,13 +2,19 @@ import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
-  const path = request.nextUrl.searchParams.get("path") || "/es/";
+  const path = request.nextUrl.searchParams.get("path") || "/en/";
 
-  console.log(`Revalidating: ${path}`);
-  revalidatePath(path);
+  console.log(`[Revalidate] Path: ${path}`);
+  console.log(`[Revalidate] Timestamp: ${new Date().toISOString()}`);
+
+  revalidatePath(path, "page");
+
+  console.log(`[Revalidate] Complete`);
 
   return NextResponse.json({
+    success: true,
     revalidated: path,
-    timestamp: Date.now(),
+    timestamp: new Date().toISOString(),
+    message: `Revalidated ${path}. Go back and hard refresh to see the new timestamp.`,
   });
 }
