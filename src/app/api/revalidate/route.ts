@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
   console.log(`[Revalidate] Path: ${path}`);
   console.log(`[Revalidate] Timestamp: ${new Date().toISOString()}`);
 
-  revalidatePath(path, "page");
+  revalidatePath(path);
 
   console.log(`[Revalidate] Complete`);
 
