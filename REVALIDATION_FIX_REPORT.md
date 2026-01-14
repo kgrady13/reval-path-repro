@@ -88,13 +88,13 @@ revalidatePath(pathWithoutSlash); // path = "/en"
 **Fix:**
 ```ts
 // BEFORE (incorrect)
-revalidatePath("/en/", "page"); // ❌ type parameter for specific URL
+revalidatePath("/en/", "page"); // type parameter for specific URL
 
 // AFTER (correct)
-revalidatePath("/en"); // ✅ no type parameter for specific URL
+revalidatePath("/en"); // no type parameter for specific URL
 
 // Type parameter ONLY for patterns:
-revalidatePath("/[lang]", "page"); // ✅ correct usage with pattern
+revalidatePath("/[lang]", "page"); // correct usage with pattern
 ```
 
 **Reference:** [revalidatePath API Documentation](https://nextjs.org/docs/app/api-reference/functions/revalidatePath)
@@ -139,9 +139,9 @@ export function generateStaticParams() {
 **Reference:** [GitHub Issue #59883](https://github.com/vercel/next.js/issues/59883)
 
 **Trade-offs:**
-- ✅ On-demand revalidation now works
-- ❌ First visit to each locale has slight delay (page generation)
-- ℹ️ Subsequent visits are cached normally
+- On-demand revalidation now works
+- First visit to each locale has slight delay (page generation)
+- Subsequent visits are cached normally
 
 **Alternative solution:** Use time-based revalidation (`revalidate: 86400`) instead of on-demand revalidation if you need `generateStaticParams`.
 
@@ -151,30 +151,30 @@ export function generateStaticParams() {
 
 ### Broken Configuration (customer branch)
 All four issues present:
-- ❌ Invalid layout hierarchy
-- ❌ Trailing slash passed to revalidatePath
-- ❌ Type parameter used for specific URL
-- ❌ generateStaticParams enabled
+- Invalid layout hierarchy
+- Trailing slash passed to revalidatePath
+- Type parameter used for specific URL
+- generateStaticParams enabled
 
 **Result:** revalidatePath() appears to succeed but cache is never invalidated.
 
 ### Test Branch (only removed generateStaticParams)
 Only removed generateStaticParams, kept other issues:
-- ❌ Invalid layout hierarchy
-- ❌ Trailing slash passed to revalidatePath
-- ❌ Type parameter used for specific URL
-- ✅ generateStaticParams disabled
+- Invalid layout hierarchy
+- Trailing slash passed to revalidatePath
+- Type parameter used for specific URL
+- generateStaticParams disabled
 
 **Result:** Still broken. Confirms multiple fixes needed.
 
 ### Fixed Configuration (fix/layout-hierarchy branch)
 All four issues resolved:
-- ✅ Proper layout hierarchy
-- ✅ Trailing slash stripped
-- ✅ No type parameter for specific URLs
-- ✅ generateStaticParams disabled
+- Proper layout hierarchy
+- Trailing slash stripped
+- No type parameter for specific URLs
+- generateStaticParams disabled
 
-**Result:** ✅ revalidatePath() works correctly! Timestamps update after revalidation + hard refresh.
+**Result:** revalidatePath() works correctly! Timestamps update after revalidation + hard refresh.
 
 ---
 
