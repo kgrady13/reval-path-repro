@@ -12,7 +12,9 @@ export async function GET(request: NextRequest) {
   const pathWithoutSlash = path.replace(/\/$/, '');
   console.log(`[Revalidate] Path without trailing slash: ${pathWithoutSlash}`);
 
-  revalidatePath(pathWithoutSlash, "page");
+  // For specific URLs (not patterns), omit the type parameter
+  // See: https://nextjs.org/docs/app/api-reference/functions/revalidatePath
+  revalidatePath(pathWithoutSlash);
 
   console.log(`[Revalidate] Complete`);
 
