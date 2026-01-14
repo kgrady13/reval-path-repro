@@ -7,7 +7,8 @@ export async function GET(request: NextRequest) {
   console.log(`[Revalidate] Tag: ${tag}`);
   console.log(`[Revalidate] Timestamp: ${new Date().toISOString()}`);
 
-  revalidateTag(tag);
+  // Next.js 16 requires a cacheLife profile as second parameter
+  revalidateTag(tag, "max");
 
   console.log(`[Revalidate] Complete`);
 

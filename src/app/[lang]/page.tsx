@@ -4,19 +4,21 @@ import { RevalidateButton } from "./RevalidateButton";
 export const dynamic = "force-static";
 export const revalidate = 86400;
 
-// Cache the page data with a tag for on-demand revalidation
-const getPageData = unstable_cache(
-  async (lang: string) => {
-    return {
-      generatedAt: new Date().toISOString(),
-      lang,
-    };
-  },
-  ["page-data"],
-  {
-    tags: (lang: string) => [`lang-${lang}`],
-  }
-);
+// Function to get cached page data with tag-based revalidation
+function getPageData(lang: string) {
+  return unstable_cache(
+    async () => {
+      return {
+        generatedAt: new Date().toISOString(),
+        lang,
+      };
+    },
+    [`page-data-${lang}`],
+    {
+      tags: [`lang-${lang}`],
+    }
+  )();
+}
 
 export default async function Page({
   params,
