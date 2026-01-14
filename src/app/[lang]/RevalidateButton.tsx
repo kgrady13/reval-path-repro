@@ -10,7 +10,8 @@ export function RevalidateButton({ lang }: { lang: string }) {
     setLoading(true);
     setResult(null);
     try {
-      const res = await fetch(`/api/revalidate/?path=/${lang}/`);
+      const tag = `lang-${lang}`;
+      const res = await fetch(`/api/revalidate/?tag=${tag}`);
       const data = await res.json();
       setResult(`Revalidated at ${data.timestamp}`);
     } catch (e) {

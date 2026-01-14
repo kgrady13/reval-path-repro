@@ -1,7 +1,22 @@
+import { unstable_cache } from "next/cache";
 import { RevalidateButton } from "./RevalidateButton";
 
 export const dynamic = "force-static";
 export const revalidate = 86400;
+
+// Cache the page data with a tag for on-demand revalidation
+const getPageData = unstable_cache(
+  async (lang: string) => {
+    return {
+      generatedAt: new Date().toISOString(),
+      lang,
+    };
+  },
+  ["page-data"],
+  {
+    tags: (lang: string) => [`lang-${lang}`],
+  }
+);
 
 export default async function Page({
   params,
@@ -9,7 +24,7 @@ export default async function Page({
   params: Promise<{ lang: string }>;
 }) {
   const { lang } = await params;
-  const generatedAt = new Date().toISOString();
+  const { generatedAt } = await getPageData(lang);
 
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", padding: "2rem", maxWidth: "600px" }}>
